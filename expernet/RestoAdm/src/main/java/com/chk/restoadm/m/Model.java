@@ -26,7 +26,8 @@ public abstract class Model implements Serializable{
         ArrayList<Model> toReturn = new ArrayList<Model>();
         // code
         EntityManager em = Model.openInstance();
-        TypedQuery<Model> req = em.createQuery("SELECT t FROM " + className + " as t", Model.class);
+        String query = "SELECT t FROM " + className + " as t";
+        TypedQuery<Model> req = em.createQuery(query, c);
         
         List<Model> allMod = req.getResultList();
 //        Model.closeInstance(em);

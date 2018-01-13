@@ -20,9 +20,14 @@ import javax.persistence.Inheritance;
 public class Util extends Model{
     @Id
     private long id;
+    private String lName;
+    private String fName;
     private String login;
     private String passwd;
     private String email;
+    private String address;
+    private String city;
+    private String zipcode;
     private String tel;
 
     public Util() {
@@ -70,6 +75,46 @@ public class Util extends Model{
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getlName() {
+        return lName;
+    }
+
+    public void setlName(String lName) {
+        this.lName = lName;
+    }
+
+    public String getfName() {
+        return fName;
+    }
+
+    public void setfName(String fName) {
+        this.fName = fName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
     }
 
     @Override

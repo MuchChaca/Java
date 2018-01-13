@@ -6,6 +6,7 @@
 package com.chk.restoadm;
 
 import com.chk.restoadm.m.Admin;
+import com.chk.restoadm.m.DB;
 import com.chk.restoadm.m.Model;
 import com.chk.restoadm.m.PersistenceManager;
 import com.chk.restoadm.m.Util;
@@ -24,25 +25,35 @@ public class mainFrame extends javax.swing.JFrame {
     public mainFrame() {
         initComponents();
         
-//        System.out.println("Hello World!");
+        
+        
+////        System.out.println("Hello World!");
 //        Admin admin1 = new Admin();
 //        admin1.setLogin("root");
 //        admin1.setPasswd("root");
 //        admin1.setEmail("foo@bar.com");
 //        admin1.setTel("0102030405");
 //        
+//        
+//        
 //        EntityManager em = PersistenceManager.INSTANCE.getEntityManager();
 //        em.getTransaction().begin();
 //        
 //        em.persist(admin1);
-        
+//        
 //        em.close();
 //        PersistenceManager.INSTANCE.close();
-        ArrayList<Model> liAdm = Util.findAll(Admin.class.getClass());
-        
-        for (Model ad:liAdm){
-            System.out.println(ad);
+
+        ArrayList<Admin> listAdmin = DB.findAll(Util.class);
+        for(Admin adm:listAdmin){
+            System.out.println(adm);
         }
+
+//        ArrayList<Model> liAdm = Util.findAll(Admin.class.getClass());
+//        
+//        for (Model ad:liAdm){
+//            System.out.println(ad);
+//        }
 
     }
 
