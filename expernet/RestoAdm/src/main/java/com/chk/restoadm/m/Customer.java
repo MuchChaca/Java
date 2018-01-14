@@ -17,5 +17,8 @@ import org.hibernate.annotations.DiscriminatorFormula;
 @DiscriminatorValue("c")
 public class Customer extends Util{
     
+    public Customer() {
+    }
+    
     
 }

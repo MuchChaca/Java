@@ -15,6 +15,9 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("a")
 public class Admin extends Util{
+
+    public Admin() {
+    }
     
     
     

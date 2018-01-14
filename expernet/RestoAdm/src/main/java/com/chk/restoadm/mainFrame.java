@@ -6,9 +6,12 @@
 package com.chk.restoadm;
 
 import com.chk.restoadm.m.Admin;
+import com.chk.restoadm.m.Customer;
 import com.chk.restoadm.m.DB;
 import com.chk.restoadm.m.Model;
 import com.chk.restoadm.m.PersistenceManager;
+import com.chk.restoadm.m.Product;
+import com.chk.restoadm.m.Tarif;
 import com.chk.restoadm.m.Util;
 import java.util.ArrayList;
 import javax.persistence.EntityManager;
@@ -25,7 +28,12 @@ public class mainFrame extends javax.swing.JFrame {
     public mainFrame() {
         initComponents();
         
-        
+        System.out.println("------------First");
+        ArrayList<Customer> allItems = DB.findAll(Customer.class);
+        for (Customer item:allItems){
+            System.out.println(DB.ANSI_PURPLE + item.toString() + DB.ANSI_RESET);
+        }
+        System.out.println("------------Second");
         
 ////        System.out.println("Hello World!");
 //        Admin admin1 = new Admin();
@@ -47,10 +55,10 @@ public class mainFrame extends javax.swing.JFrame {
         
         
 
-        ArrayList<Admin> listAdmin = DB.findAll(Util.class);
-        for(Admin adm:listAdmin){
-            System.out.println(adm);
-        }
+//        ArrayList<Admin> listAdmin = DB.findAll(Util.class);
+//        for(Admin adm:listAdmin){
+//            System.out.println(adm);
+//        }
         
 //        ArrayList<Model> liAdm = Util.findAll(Admin.class.getClass());
 //        

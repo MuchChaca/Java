@@ -46,6 +46,7 @@ public abstract class Model implements Serializable{
 //        em.close();
 //        PersistenceManager.INSTANCE.close();
 //    }
+    
     /**
      * <h1>Needs to be override</h1>
      */

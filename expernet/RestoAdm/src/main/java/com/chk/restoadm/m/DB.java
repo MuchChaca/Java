@@ -18,6 +18,16 @@ import javax.persistence.TypedQuery;
  * @param <T>
  */
 public abstract class DB {
+    // BackgroundColor + TextColor
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[47m" + "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[47m" + "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[47m" + "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[47m" + "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[47m" + "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[47m" + "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[47m" + "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
     
     // ================= - Operations - ================= //
     
@@ -51,6 +61,7 @@ public abstract class DB {
      * <b><u>The name of the class must start with a Capital letter</u></b>
      * <b><i>Example:</i></b>
      * <pre><em>ArrayList<Util> obj = DB.findAll("Util");</em></pre>
+     * @bug doesn't find Class
      * @param <T extends Model>
      * @param className <b><u>The name of the class must start with a Capital letter</u></b>
      * @return ArrayList<Object is T>
@@ -61,6 +72,7 @@ public abstract class DB {
         
         try {
             Class c = Class.forName(className);
+            System.out.println(DB.ANSI_GREEN + c.getSimpleName());
             String query = String.format("SELECT o FROM %s as p ", className);
             
             TypedQuery<T> q = em.createQuery(query, c);
@@ -68,6 +80,7 @@ public abstract class DB {
             listAll.addAll(q.getResultList());
             
         } catch (ClassNotFoundException ex) {
+            System.out.println(DB.ANSI_RED + "[--] Damn the poney got lost >.< \n" + DB.ANSI_RESET);
             Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             DB.closeInstance(em);
@@ -151,10 +164,10 @@ public abstract class DB {
                 success = true;
             }
         } catch (Exception ex){
-            System.out.println("[--] Omg magic trick didn't work !!\n" + ex.toString());
+            System.out.println(DB.ANSI_RED + "[--] Omg magic trick didn't work !!\n" + ex.toString() + DB.ANSI_RESET);
         }finally{
             DB.closeTransaction(em);
-            System.out.println("[++] Brave yourslef! Deletion succeed!");
+            System.out.println(DB.ANSI_CYAN + "[++] Brave yourslef! Deletion succeed!" + DB.ANSI_RESET);
             return success;
         }
     }
@@ -178,10 +191,10 @@ public abstract class DB {
             T toDel = DB.findOne(c, id);
             success = DB.delOne(toDel);
         } catch(Exception ex) {
-            System.out.println("[--] Error while deleting\n" + ex.toString());
+            System.out.println(DB.ANSI_RED + "[--] Error while deleting\n" + ex.toString() + DB.ANSI_RESET);
         } finally {
             DB.closeTransaction(em);
-            System.out.println("[++] Brave yourslef! Deletion succeed!");
+            System.out.println(DB.ANSI_CYAN + "[++] Brave yourslef! Deletion succeed!" + DB.ANSI_RESET);
             return success;
         }
     }
@@ -198,7 +211,7 @@ public abstract class DB {
      */
     public static<T extends Model> boolean updateOne(T obj){
         boolean success = false;
-        String info = "[--] Summer time sadness... Nothing changed!";
+        String info = DB.ANSI_RED + "[--] Summer time sadness... Nothing changed!" + DB.ANSI_RESET;
         
         EntityManager em = DB.openTransaction();
         
@@ -207,7 +220,7 @@ public abstract class DB {
         
         if(!bfUpdate.equals(afUpdate)){
             success = true;
-            info = "[++] Summer time sadness... Nothing changed!";
+            info = DB.ANSI_CYAN + "[++] Summer time sadness... Nothing changed!" + DB.ANSI_RESET;
         }
         
         System.out.println(info);
