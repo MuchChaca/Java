@@ -7,6 +7,7 @@ package com.chk.restoadm.m;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import org.hibernate.annotations.DiscriminatorFormula;
 
 /**
  *
@@ -15,18 +16,6 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("c")
 public class Customer extends Util{
-    private String adresse;
-
-    
-    
-    // GETTERS & SETTERS
-    public String getAdresse() {
-        return adresse;
-    }
-
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
-    }
     
     
 }

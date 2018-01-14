@@ -7,6 +7,8 @@ package com.chk.restoadm.m;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
@@ -17,17 +19,17 @@ import javax.persistence.TypedQuery;
  */
 public abstract class DB {
     
-    // ================= - CRUD - ================= //
+    // ================= - Operations - ================= //
     
     /**
      * <h2>Retrieves all entries of the table associated to the Class provided</h2>
      * <b><i>Example:</i></b>
      * <pre><em>ArrayList<Util> obj = DB.findAll(Util.class);</em></pre>
-     * @param <T> The type
+     * @param <T extends Model> The type
      * @param c The name of the class must be the one tagged with @Entity
      * @return ArrayList<Object is T>
      */
-    public static<T> ArrayList<T> findAll(Class c){
+    public static<T extends Model> ArrayList<T> findAll(Class c){
 //        System.out.println(table.toString());
         ArrayList<T> listAll = new ArrayList<T>();
         String table = c.getSimpleName();
@@ -45,15 +47,48 @@ public abstract class DB {
     }
     
     /**
+     * <h2>Retrieves all entries of the table associated to the name of the Class which is annotated w/ @Entity provided</h2>
+     * <b><u>The name of the class must start with a Capital letter</u></b>
+     * <b><i>Example:</i></b>
+     * <pre><em>ArrayList<Util> obj = DB.findAll("Util");</em></pre>
+     * @param <T extends Model>
+     * @param className <b><u>The name of the class must start with a Capital letter</u></b>
+     * @return ArrayList<Object is T>
+     */
+    public static<T extends Model> ArrayList<T> findAll(String className){
+        ArrayList<T> listAll = new ArrayList<T>();
+        EntityManager em = DB.openInstance();
+        
+        try {
+            Class c = Class.forName(className);
+            String query = String.format("SELECT o FROM %s as p ", className);
+            
+            TypedQuery<T> q = em.createQuery(query, c);
+            
+            listAll.addAll(q.getResultList());
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            DB.closeInstance(em);
+            return listAll;
+        }
+    }
+    
+    /**
      * <h2>Find an entry in the database from the Class and the id</h2>
      * <b><i>Example:</i></b>
-     * <pre><em>Util obj = DB.findOne(Util.class, 0L);</em></pre>
-     * @param <T> The type of the Object
+     * <pre><em>Util obj = DB.findOne(Util.class, 0L);
+     * // In case of inheritence
+     * if(obj.getType_user() == 'a'){
+     *    Admin adminObj = (Admin)obj;
+     * }</em></pre>
+     * @param <T extends Model> The type of the Object
      * @param c Class tagged with @Entity
      * @param id The id of the row to fetch
      * @return <Object is T>
      */
-    public static<T> T findOne(Class c, long id){
+    public static<T extends Model> T findOne(Class c, long id){
         
         EntityManager em = DB.openInstance();
         
@@ -67,20 +102,122 @@ public abstract class DB {
         return obj;
     }
     
-    public static<T> boolean delOne(T obj){
+    /**
+     * <h2>Find an entry in the database from the Object's id</h2>
+     * <b><i>Example:</i></b>
+     * <pre><em>Util obj = new Util();
+     * obj.setId(3L);
+     * obj = DB.findOne(obj);
+     * // In case of inheritence
+     * if(obj.getType_user() == 'a'){
+     *    Admin adminObj = (Admin)obj;
+     * }</em></pre>
+     * @param <T extends Model>
+     * @param obj
+     * @return <Object is T> 
+     */
+    public static<T extends Model> T findOne(T obj){
+        
+        EntityManager em = DB.openInstance();
+        
+        Class c = obj.getClass();
+        String query = String.format("SELECT o FROM %s as o WHERE o = :id", c.getSimpleName());
+        TypedQuery<T> q = em.createQuery(query, c);
+        q.setParameter("id", obj.getId());
+        T object = q.getSingleResult();
+        
+        DB.closeInstance(em);
+        
+        return object;
+    }
+    
+    /**
+     * <h2>Delete an entry in the database associated to the object provided</h2>
+     * <b><i>Example:</i></b>
+     * <pre><em>Admin objectAdmin = new Admin(); // assume all the attributes are initialized
+     * boolean success = DB.delOne(objectAdmin);</em></pre>
+     * @param <T extends Model>
+     * @param obj The object representing the entry to delete
+     * @return boolean - true if success, false if failure
+     */
+    public static<T extends Model> boolean delOne(T obj){
+        
+        EntityManager em = DB.openTransaction();
+        boolean success = false;
+        try{
+            em.remove(obj);
+            T check = DB.findOne(obj);
+            if (  check == null ){
+                success = true;
+            }
+        } catch (Exception ex){
+            System.out.println("[--] Omg magic trick didn't work !!\n" + ex.toString());
+        }finally{
+            DB.closeTransaction(em);
+            System.out.println("[++] Brave yourslef! Deletion succeed!");
+            return success;
+        }
+    }
+    
+    /**
+     * <h2>Delete an entry in the database associated to the Class / id provided</h2>
+     * <b><i>Example:</i></b>
+     * <pre><em>Admin objectAdmin = new Admin(); // assume all the attributes are initialized
+     * boolean success = DB.delOne(Admin.class, objectAdmin.getId());</em></pre>
+     * @param <T extends Model>
+     * @param c A class annotated with @Entity
+     * @param id The id of the entry/object to delete from the database
+     * @return boolean - true if success, false if failure
+     */
+    public static<T extends Model> boolean delOne(Class c, long id){
+        
+        EntityManager em = DB.openTransaction();
+        boolean success = false;
+        
+        try{
+            T toDel = DB.findOne(c, id);
+            success = DB.delOne(toDel);
+        } catch(Exception ex) {
+            System.out.println("[--] Error while deleting\n" + ex.toString());
+        } finally {
+            DB.closeTransaction(em);
+            System.out.println("[++] Brave yourslef! Deletion succeed!");
+            return success;
+        }
+    }
+    
+    /**
+     * <h2>Update an entry in the database associated to the Object provided</h2>
+     * <b><i>Example:</i></b>
+     * <pre><em>Admin objectAdmin = new Admin(); // assume all the attributes are initialized
+     * objectAdmin.setEmail("new@email.com");
+     * boolean success = DB.updateOne(objectAdmin);</em></pre>
+     * @param <T extends Model>
+     * @param obj
+     * @return 
+     */
+    public static<T extends Model> boolean updateOne(T obj){
+        boolean success = false;
+        String info = "[--] Summer time sadness... Nothing changed!";
         
         EntityManager em = DB.openTransaction();
         
-        try{
-            em.remove(obj);
-        } catch (Exception ex){
-            System.out.println("Error while deleting\n" + ex.toString());
-        }finally{
-            DB.closeTransaction(em);
-            System.out.println("Deletion succeed");
-            return true;
+        T bfUpdate = DB.findOne(obj.getClass(), obj.getId());
+        T afUpdate = em.merge(obj);
+        
+        if(!bfUpdate.equals(afUpdate)){
+            success = true;
+            info = "[++] Summer time sadness... Nothing changed!";
         }
+        
+        System.out.println(info);
+        DB.closeTransaction(em);
+        
+        return success;
     }
+    
+    
+    
     
     
     // ================= - EntityManager - ================= //
@@ -107,8 +244,9 @@ public abstract class DB {
     }
     
     /**
-     * Close the EntityManager
-     * Close the PersistenceManager
+     * <h2>Close an <u>Instance</u></h2>
+     * <ul><li>Close the EntityManager</li>
+     * <li>Close the PersistenceManager</li>
      * @param em The EntityManager to close
      */
     private static void closeInstance(EntityManager em){
@@ -117,9 +255,11 @@ public abstract class DB {
     }
     
     /**
+     * <h2>Close a <u>Transaction</u></h2>
      * <ul><li><strong>Commit first</strong></li>
      * <li>Then close the EntityManager</li>
      * <li>Close the PersistenceManager</li></ul>
+     * <em>So no the commit is included to this function</em>
      * @param em The EntityManager to close
      */
     private static void closeTransaction(EntityManager em){

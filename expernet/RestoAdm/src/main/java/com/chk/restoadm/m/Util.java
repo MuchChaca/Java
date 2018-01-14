@@ -9,13 +9,14 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 /**
  *
  * @author archey
  */
 @Entity
-@Inheritance
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="type_user")
 public class Util extends Model{
     @Id
@@ -29,6 +30,7 @@ public class Util extends Model{
     private String city;
     private String zipcode;
     private String tel;
+//    private String type_user;
 
     public Util() {
     }
@@ -116,6 +118,15 @@ public class Util extends Model{
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
+
+//    public String getType_user() {
+//        return type_user;
+//    }
+//
+//    public void setType_user(String type_user) {
+//        this.type_user = type_user;
+//    }
+    
 
     @Override
     public String toString() {
