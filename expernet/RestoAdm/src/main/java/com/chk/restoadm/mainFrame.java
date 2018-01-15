@@ -28,12 +28,12 @@ public class mainFrame extends javax.swing.JFrame {
     public mainFrame() {
         initComponents();
         
-        System.out.println("------------First");
+        DB.printYel("------------First");
         ArrayList<Customer> allItems = DB.findAll(Customer.class);
         for (Customer item:allItems){
-            System.out.println(DB.ANSI_PURPLE + item.toString() + DB.ANSI_RESET);
+            DB.printPur(item.toString());
         }
-        System.out.println("------------Second");
+        DB.printCyan("------------Second");
         
 ////        System.out.println("Hello World!");
 //        Admin admin1 = new Admin();
