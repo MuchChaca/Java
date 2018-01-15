@@ -5,7 +5,10 @@
  */
 package com.chk.restoadm.m;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -16,13 +19,25 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Image extends Model {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String imgPath;
     private String description;
-    @ManyToOne
-    private Product product;
+    /*@ManyToOne
+    private Product product;*/
     
     public Image() {
+    }
+
+    /*public Image(String imgPath, String description, Product product) {
+        this.imgPath = imgPath;
+        this.description = description;
+       // this.product = product;
+    }*/
+    
+    public Image(String imgPath, String description) {
+        this.imgPath = imgPath;
+        this.description = description;
     }
     
     // ============= - GETTERS & SETTERS - ============= //
@@ -52,13 +67,18 @@ public class Image extends Model {
     public void setDescription(String description) {
         this.description = description;
     }
-
+/*
     public Product getProduct() {
         return product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+*/
+    @Override
+    public String toString() {
+        return description + " " + imgPath;
     }
     
     

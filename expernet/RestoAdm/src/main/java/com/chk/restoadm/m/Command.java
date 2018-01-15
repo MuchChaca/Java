@@ -8,8 +8,12 @@ package com.chk.restoadm.m;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -18,14 +22,25 @@ import javax.persistence.ManyToMany;
 @Entity
 public class Command extends Model{
     @Id
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private long id;
     private Date dateOrder;
     private Date dateDelivPlan;
     private Date dateDelivAct;
     @ManyToMany
     private Collection<Product> products;
+    @ManyToOne
+    private Customer customer;
 
     public Command() {
+    }
+
+    public Command(Date dateOrder, Date dateDelivPlan, Date dateDelivAct, Collection<Product> products, Customer customer) {
+        this.dateOrder = dateOrder;
+        this.dateDelivPlan = dateDelivPlan;
+        this.dateDelivAct = dateDelivAct;
+        this.products = products;
+        this.customer = customer;
     }
     
     // ============= - GETTERS & SETTERS - ============= //
@@ -70,6 +85,14 @@ public class Command extends Model{
 
     public void setProducts(Collection<Product> products) {
         this.products = products;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
     
 }

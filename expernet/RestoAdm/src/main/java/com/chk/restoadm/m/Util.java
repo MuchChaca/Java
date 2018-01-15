@@ -7,6 +7,8 @@ package com.chk.restoadm.m;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -20,6 +22,7 @@ import javax.persistence.InheritanceType;
 @DiscriminatorColumn(name="type_user")
 public class Util extends Model{
     @Id
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private long id;
     private String lName;
     private String fName;
@@ -35,8 +38,17 @@ public class Util extends Model{
     public Util() {
     }
 
-    
-    
+    public Util(String lName, String fName, String login, String passwd, String email, String address, String city, String zipcode, String tel) {
+        this.lName = lName;
+        this.fName = fName;
+        this.login = login;
+        this.passwd = passwd;
+        this.email = email;
+        this.address = address;
+        this.city = city;
+        this.zipcode = zipcode;
+        this.tel = tel;
+    }
     
     // GETTERS & SETTERS
     public String getLogin() {

@@ -6,7 +6,10 @@
 package com.chk.restoadm.m;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
@@ -18,12 +21,13 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Tarif extends Model {
     @Id
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private long id;
     private double ht;
     private double taxe;
-    private Date dateValid;
-    @ManyToOne
-    private Product product;
+    private Date dateValid = new Date();
+    /*@ManyToOne
+    private Product product;*/
 
     public Tarif() {
     }
@@ -63,7 +67,7 @@ public class Tarif extends Model {
     public void setDateValid(Date dateValid) {
         this.dateValid = dateValid;
     }
-
+/*
     public Product getProduct() {
         return product;
     }
@@ -71,13 +75,23 @@ public class Tarif extends Model {
     public void setProduct(Product product) {
         this.product = product;
     }
-
+    */
+    public void setHt(String s){
+        double d = Double.parseDouble(s);
+        this.setHt(d);
+    }
+    public void setTaxe(String s) {
+        double d = Double.parseDouble(s);
+        this.setTaxe(d);
+    }
+    
+    
     
     
     
     
     @Override
     public String toString() {
-        return "Tarif{" + "id=" + id + ", ht=" + ht + ", taxe=" + taxe + ", dateValid=" + dateValid + ", product=" + product + '}';
+        return "Tarif{" + "id=" + id + ", ht=" + ht + ", taxe=" + taxe  + '}';
     }
 }

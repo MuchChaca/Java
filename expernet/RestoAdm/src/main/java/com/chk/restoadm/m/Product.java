@@ -7,7 +7,12 @@ package com.chk.restoadm.m;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -19,20 +24,47 @@ import javax.persistence.OneToMany;
 @Entity
 public class Product extends Model{
     @Id
+    @GeneratedValue (strategy = GenerationType.AUTO)
     private long id;
     private String name;
     private String description;
     private String type;
     private String taille;
-    @OneToMany
+    @OneToMany(cascade=CascadeType.PERSIST)
     private Collection<Tarif> prices;
-    @OneToMany
+    @OneToMany(cascade=CascadeType.PERSIST)
     private Collection<Image> images;
     @ManyToMany
     private Collection<Command> orders;
 
     public Product() {
     }
+/*
+    public Product(String name, String description, String type, String taille, ArrayList<Tarif> tarif) {
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.taille = taille;
+        this.orders = null;
+        this.images = null;
+        this.prices = tarif;
+    }
+*/
+    public Product(String name, String description, String type, String taille, Collection<Tarif> prices, Collection<Image> images) {
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.taille = taille;
+        this.prices = prices;
+        this.images = images;
+    }
+    public Product(String name, String description, String type, String taille) {
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.taille = taille;
+    }
+    
     
     
     // ============= - GETTERS & SETTERS - ============= //
@@ -102,11 +134,31 @@ public class Product extends Model{
     public void setOrders(Collection<Command> orders) {
         this.orders = orders;
     }
+    
+    public Tarif getPrice(){
+        Date d = new Date();
+        Tarif thePrice = new Tarif();
+        for (Tarif Price : this.getPrices()) {
+            if (Price.getDateValid().after(d)){
+                d = Price.getDateValid();
+                thePrice = Price;
+            }
+        }
+        return thePrice;
+    }
+    
+    public String getHtString(){
+        return String.format("%1$,.2f", this.getPrice().getHt());
+    }
+    
+    public String getTvaString(){
+        return String.format("%1$,.2f", this.getPrice().getTaxe());
+    }
 
     
     
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", description=" + description + ", type=" + type + ", taille=" + taille + ", prices=" + prices + ", images=" + images + ", orders=" + orders + '}';
+        return id + " | " + name + " | " + type + " | " + taille + " | " + this.getPrice().getDateValid();
     }
 }

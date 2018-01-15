@@ -3,24 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.chk.restoadm.m;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+package com.chk.restoadm;
 
 /**
  *
  * @author archey
  */
-@Entity
-@DiscriminatorValue("a")
-public class Admin extends Util{
-
-    
-    
-    public Admin() {
-    }
-    
-    
+class LocaleDate {
     
 }

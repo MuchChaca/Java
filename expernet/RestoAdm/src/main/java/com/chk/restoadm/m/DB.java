@@ -30,6 +30,9 @@ public abstract class DB {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[46m" + "\u001B[37m";
     
+    public static final int IMG_WIDTH = 250;
+    public static final int IMG_HEIGHT = 170;
+    
     /**
      * <h2>Use with a dark theme like Dracula</h2>
      * Uses <i>System.out.println</i> to print in <b>Blue</b>
@@ -296,6 +299,30 @@ public abstract class DB {
         return success;
     }
     
+    public static<T extends Model> boolean createOne(T obj) {
+        boolean success = false;
+        String info = "[--] Forever alone !? Nothing new then!";
+        try{
+            EntityManager em = DB.openTransaction();
+
+            em.persist(obj);
+    //        em.getTransaction().setRollbackOnly();
+
+            DB.closeTransaction(em);
+            /*
+            if (DB.findOne(obj) != null){*/
+                success = true;
+                info = "[++] Much Wow! Much New Stuff!";
+            /*}*/
+            DB.printYel(info);
+        } catch (Exception ex) {
+            DB.printRed("Then the error was created...");
+            System.out.println(ex);
+        }
+        DB.printYel(info);
+        return success;
+    }
+    
     
     
     
@@ -330,8 +357,8 @@ public abstract class DB {
      * @param em The EntityManager to close
      */
     private static void closeInstance(EntityManager em){
-        em.close();
-        PersistenceManager.INSTANCE.close();
+        //em.close();
+        //PersistenceManager.INSTANCE.close();
     }
     
     /**
@@ -347,5 +374,6 @@ public abstract class DB {
         em.close();
         PersistenceManager.INSTANCE.close();
     }
+    
     
 }
