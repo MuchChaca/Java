@@ -24,7 +24,7 @@ public class Command extends Model{
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private long id;
-    private Date dateOrder;
+    private Date dateOrder = new Date();;
     private Date dateDelivPlan;
     private Date dateDelivAct;
     @ManyToMany
@@ -35,10 +35,9 @@ public class Command extends Model{
     public Command() {
     }
 
-    public Command(Date dateOrder, Date dateDelivPlan, Date dateDelivAct, Collection<Product> products, Customer customer) {
-        this.dateOrder = dateOrder;
+    public Command(Date dateDelivPlan, Collection<Product> products, Customer customer) {
         this.dateDelivPlan = dateDelivPlan;
-        this.dateDelivAct = dateDelivAct;
+//        this.dateDelivAct = dateDelivAct;
         this.products = products;
         this.customer = customer;
     }

@@ -155,10 +155,16 @@ public class Product extends Model{
         return String.format("%1$,.2f€", this.getPrice().getTaxe());
     }
 
+    public double getTTC(){
+        return this.getPrice().getTTC();
+    }
     
+    public String getTTCString(){
+        return String.format("%1$,.2f€", this.getTTC());
+    }
     
     @Override
     public String toString() {
-        return name + ";  " + type + ";  " + taille + " = " + this.getHtString();
+        return name + ";  " + type + ";  " + taille + " = " + this.getTTCString();
     }
 }

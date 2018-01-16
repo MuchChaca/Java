@@ -30,6 +30,7 @@ import javax.swing.JList;
 public class mainFrame extends javax.swing.JFrame {
     private ArrayList<Product> allProd = new ArrayList<Product>();
     private ArrayList<Product> currOrder = new ArrayList<Product>();
+    private double currTotal = 0;
     /**
      * Creates new form mainFrame
      */
@@ -99,6 +100,11 @@ public class mainFrame extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -238,7 +244,7 @@ public class mainFrame extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(jList2);
 
-        jLabel11.setText("Total HT");
+        jLabel11.setText("Total TTC");
 
         jButton2.setText("Remove");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -248,6 +254,11 @@ public class mainFrame extends javax.swing.JFrame {
         });
 
         jButton3.setText("Confirm");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -333,6 +344,28 @@ public class mainFrame extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu3);
 
+        jMenu4.setText("Clients");
+
+        jMenuItem3.setText("See all");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem3);
+
+        jMenuItem4.setText("New Client");
+        jMenu4.add(jMenuItem4);
+
+        jMenuBar1.add(jMenu4);
+
+        jMenu5.setText("Orders");
+
+        jMenuItem5.setText("See all");
+        jMenu5.add(jMenuItem5);
+
+        jMenuBar1.add(jMenu5);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -363,6 +396,21 @@ public class mainFrame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+//        Image selecImg = jList1.getSelectedValue();
+//        this.listImg.remove(selecImg);
+//        this.loadImgsL(this.listImg, jList1);
+        
+        ArrayList<Product> toRemProd = new ArrayList<Product>(jList2.getSelectedValuesList());
+        if (toRemProd.size() > 0){
+            
+            for(Product prod:toRemProd){
+                this.currTotal -= prod.getTTC();
+                if(this.currOrder.contains(prod)){
+                    this.currOrder.remove(prod);
+                }
+            }
+        }
+        loadTempOrder(jList2, this.currOrder);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jList1ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList1ValueChanged
@@ -401,6 +449,7 @@ public class mainFrame extends javax.swing.JFrame {
 //        }else{
 //            DB.printCyan("liProd is empty (A K A - currOrder");
 //        }
+        this.updateTotal();
         jList2.setModel(modOrderli);
     }
     
@@ -409,13 +458,38 @@ public class mainFrame extends javax.swing.JFrame {
 //        DefaultListModelCustom modOrderli = new DefaultListModelCustom(this.currOrder);
 //        jlist.setModel(modOrderli);
 //    }
+    private String doubleToString(double d){
+        return String.format("%1$,.2f€", d);
+    }
+    
+    private void updateTotal(){
+        jLabel12.setText(this.doubleToString(this.currTotal));
+    }
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         this.currOrder.add(jList1.getSelectedValue());
 //        DB.printYel(jList1.getSelectedValue().toString());
+        this.currTotal += jList1.getSelectedValue().getTTC();
+        DB.printYel(this.doubleToString(this.currTotal));
         this.loadTempOrder(jList2, this.currOrder);
+        
+//        this.updateTotal();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if(this.currOrder.size() > 0){
+            //code
+        }else{
+            popUpInfo popError = new popUpInfo("Error, you haven't choose any product to order ... yet !", this);
+            popError.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -474,9 +548,14 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

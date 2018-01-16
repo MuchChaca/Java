@@ -85,6 +85,10 @@ public class Tarif extends Model {
         this.setTaxe(d);
     }
     
+    public double getTTC(){
+        return this.getHt() * this.getTaxe();
+    }
+    
     
     
     

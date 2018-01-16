@@ -20,26 +20,26 @@ import javax.persistence.OneToMany;
 @DiscriminatorValue("c")
 public class Customer extends Util{
     
-    @OneToMany
-    private Collection<Command> commands;
+//    @OneToMany
+//    private Collection<Command> commands;
     
     public Customer() {
     }
 
-    public Customer(String lName, String fName, String login, String passwd, String email, String address, String city, String zipcode, String tel, Collection<Command> commands) {
+    public Customer(String lName, String fName, String login, String passwd, String email, String address, String city, String zipcode, String tel) {
         super(lName, fName, login, passwd, email, address, city, zipcode, tel);
-        this.commands = commands;
+//        this.commands = commands;
     }
     
     // GETTERS & SETTERS
 
-    public Collection<Command> getCommands() {
-        return commands;
-    }
-
-    public void setCommands(Collection<Command> commands) {
-        this.commands = commands;
-    }
+//    public Collection<Command> getCommands() {
+//        return commands;
+//    }
+//
+//    public void setCommands(Collection<Command> commands) {
+//        this.commands = commands;
+//    }
     
     
 }
