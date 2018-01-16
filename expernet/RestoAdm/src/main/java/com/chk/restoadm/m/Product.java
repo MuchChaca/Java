@@ -148,17 +148,17 @@ public class Product extends Model{
     }
     
     public String getHtString(){
-        return String.format("%1$,.2f", this.getPrice().getHt());
+        return String.format("%1$,.2f€", this.getPrice().getHt());
     }
     
     public String getTvaString(){
-        return String.format("%1$,.2f", this.getPrice().getTaxe());
+        return String.format("%1$,.2f€", this.getPrice().getTaxe());
     }
 
     
     
     @Override
     public String toString() {
-        return id + " | " + name + " | " + type + " | " + taille + " | " + this.getPrice().getDateValid();
+        return name + ";  " + type + ";  " + taille + " = " + this.getHtString();
     }
 }

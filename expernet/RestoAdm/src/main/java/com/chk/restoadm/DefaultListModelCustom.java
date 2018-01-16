@@ -41,5 +41,8 @@ public class DefaultListModelCustom<T extends Object>  extends AbstractListModel
         this.listObj = listObj;
     }
     
+    public void add(T obj){
+        this.listObj.add(obj);
+    }
     
 }

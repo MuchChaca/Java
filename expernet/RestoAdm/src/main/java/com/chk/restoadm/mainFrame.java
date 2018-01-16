@@ -29,6 +29,7 @@ import javax.swing.JList;
  */
 public class mainFrame extends javax.swing.JFrame {
     private ArrayList<Product> allProd = new ArrayList<Product>();
+    private ArrayList<Product> currOrder = new ArrayList<Product>();
     /**
      * Creates new form mainFrame
      */
@@ -39,6 +40,7 @@ public class mainFrame extends javax.swing.JFrame {
             DB.printGreen(prod.toString());
         });
         this.loadProds(this.allProd, jList1);
+        this.loadTempOrder(jList2, this.currOrder);
         
         // Actual code
         //Seed.products();
@@ -123,6 +125,11 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel8.setText("Type");
 
         jButton1.setText("Add to order");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -387,6 +394,29 @@ public class mainFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jList1ValueChanged
 
+    private void loadTempOrder(JList<Product> jlist, ArrayList<Product> liProd){
+        DefaultListModelCustom modOrderli = new DefaultListModelCustom(liProd);
+//        if(liProd.size() > 0){
+//            DB.printCyan(liProd.get(0).toString());
+//        }else{
+//            DB.printCyan("liProd is empty (A K A - currOrder");
+//        }
+        jList2.setModel(modOrderli);
+    }
+    
+//    private void addProdToOrder(JList<Product> jlist, Product prod){
+//        this.currOrder.add(jlist.getSelectedValue());
+//        DefaultListModelCustom modOrderli = new DefaultListModelCustom(this.currOrder);
+//        jlist.setModel(modOrderli);
+//    }
+    
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.currOrder.add(jList1.getSelectedValue());
+//        DB.printYel(jList1.getSelectedValue().toString());
+        this.loadTempOrder(jList2, this.currOrder);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -440,7 +470,7 @@ public class mainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<Product> jList1;
-    private javax.swing.JList<String> jList2;
+    private javax.swing.JList<Product> jList2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
